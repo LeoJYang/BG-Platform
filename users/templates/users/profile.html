@@ -1,0 +1,27 @@
+<h2>Profile</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Profile</button>
+</form>
+
+<h2>Your Friends</h2>
+<ul>
+    {% for friend in user.friendship_requests_received.all %}
+        {% if friend.accepted %}
+            <li>{{ friend.user_from.username }}</li>
+        {% endif %}
+    {% endfor %}
+</ul>
+
+<h2>Pending Friend Requests</h2>
+<ul>
+    {% for friend in user.friendship_requests_received.all %}
+        {% if not friend.accepted %}
+            <li>
+                {{ friend.user_from.username }}
+                <a href="{% url 'accept_friend_request' friend.id %}">Accept</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
